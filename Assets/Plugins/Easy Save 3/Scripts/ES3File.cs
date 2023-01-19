@@ -11,7 +11,7 @@ using System.Linq;
 public class ES3File
 {
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    internal static Dictionary<string, ES3File> cachedFiles = new Dictionary<string, ES3File>();
+    public static Dictionary<string, ES3File> cachedFiles = new Dictionary<string, ES3File>();
 
     public ES3Settings settings;
     private Dictionary<string, ES3Data> cache = new Dictionary<string, ES3Data>();
@@ -104,10 +104,11 @@ public class ES3File
         if (settings == null)
             settings = new ES3Settings();
 
-        ES3.DeleteFile(settings);
-
         if (cache.Count == 0)
+        {
+            ES3.DeleteFile(settings);
             return;
+        }
 
         using (var baseWriter = ES3Writer.Create(settings, true, !syncWithFile, false))
         {
@@ -273,10 +274,13 @@ public class ES3File
     /// <summary>Loads the ES3File as a raw, unencrypted, uncompressed byte array.</summary>
     public byte[] LoadRawBytes()
     {
-        var unencryptedSettings = (ES3Settings)settings.Clone();
-        unencryptedSettings.encryptionType = ES3.EncryptionType.None;
-        unencryptedSettings.compressionType = ES3.CompressionType.None;
-        return GetBytes(unencryptedSettings);
+        var newSettings = (ES3Settings)settings.Clone();
+        if (!newSettings.postprocessRawCachedData)
+        {
+            newSettings.encryptionType = ES3.EncryptionType.None;
+            newSettings.compressionType = ES3.CompressionType.None;
+        }
+        return GetBytes(newSettings);
     }
 
     /// <summary>Loads the ES3File as a raw, unencrypted, uncompressed string, using the encoding defined in the ES3File's settings variable.</summary>
@@ -303,8 +307,11 @@ public class ES3File
             var memorySettings = (ES3Settings)settings.Clone();
             memorySettings.location = ES3.Location.InternalMS;
             // Ensure we return unencrypted bytes.
-            memorySettings.encryptionType = ES3.EncryptionType.None;
-            memorySettings.compressionType = ES3.CompressionType.None;
+            if (!memorySettings.postprocessRawCachedData)
+            {
+                memorySettings.encryptionType = ES3.EncryptionType.None;
+                memorySettings.compressionType = ES3.CompressionType.None;
+            }
 
             using (var baseWriter = ES3Writer.Create(ES3Stream.CreateStream(ms, memorySettings, ES3FileMode.Write), memorySettings, true, false))
             {
@@ -470,7 +477,7 @@ public class ES3File
     {
         ES3File cachedFile;
         if (!cachedFiles.TryGetValue(settings.path, out cachedFile))
-            throw new FileNotFoundException("Could not get timestamp from the file '" + settings.path + "' because it could not be found in the cache.");
+            return new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
         return cachedFile.timestamp;
     }
 }

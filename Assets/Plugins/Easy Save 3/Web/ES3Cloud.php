@@ -114,7 +114,6 @@ else if(isset($_POST["deleteFile"]))
 // ----- GET FILENAMES WITH PATTERN -----
 else if(isset($_POST["getFilenames"]) && isset($_POST["pattern"]))
 {
-	echo "Here";
 	$stmt = $db->prepare("SELECT $filenameField FROM $tableName WHERE $userField = :user AND $filenameField LIKE :pattern");
 	$postUser = GetPOSTUser();
 	$stmt->bindParam(":user", $postUser);
@@ -297,7 +296,7 @@ PRIMARY KEY (`$filenameField`,`$userField`)
 function ManuallyInstall($phpScript)
 {
 		    	echo "	<p>Couldn't create PHP file on your server. This could be because file_put_contents is not supported on your server, or you do not have permission to write files to this folder on your server.</p>
-	    			<p>To manually install the PHP file, please create a file named <em>ES3Variables.php</em> in the same directory as your ES3.php file with the following contents:</p>
+	    			<p>To manually install the PHP file, please create a file named <em>ES3Variables.php</em> in the same directory as your ES3Cloud.php file with the following contents:</p>
 					<pre>$phpScript</pre>
 					<p>After creating this file, installation will be complete.</p>";
 }

@@ -138,12 +138,14 @@ public class ES3ReferenceMgrEditor : Editor
             return;
         }
 
-        if (Selection.objects == null || Selection.objects.Length == 0)
+        var selected = Selection.GetFiltered<UnityEngine.Object>(SelectionMode.DeepAssets);
+
+        if (selected == null || selected.Length == 0)
             return;
 
         Undo.RecordObject(mgr, "Update Easy Save 3 Reference Manager");
 
-        foreach (var obj in Selection.objects)
+        foreach (var obj in selected)
         {
             if (obj == null)
                 continue;
@@ -163,7 +165,8 @@ public class ES3ReferenceMgrEditor : Editor
     [MenuItem("Assets/Easy Save 3/Add Reference(s) to Manager", true, 33)]
     private static bool CanAddReferenceToManager()
     {
-        return Selection.objects != null && Selection.objects.Length > 0 && ES3ReferenceMgr.Current != null;
+        var selected = Selection.GetFiltered<UnityEngine.Object>(SelectionMode.Deep);
+        return selected != null && selected.Length > 0 && ES3ReferenceMgr.Current != null;
     }
 
     [MenuItem("GameObject/Easy Save 3/Add Manager to Scene", false, 33)]

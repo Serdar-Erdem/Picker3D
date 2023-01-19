@@ -23,15 +23,31 @@ MonoBehaviour:
     prettyPrint: 1
     bufferSize: 2048
     saveChildren: 1
+    postprocessRawCachedData: 0
     typeChecking: 1
     safeReflection: 1
     memberReferenceMode: 0
     referenceMode: 2
     serializationDepthLimit: 64
     assemblyNames:
-    - Assembly-CSharp-firstpass
     - Assembly-CSharp
+    - Assembly-CSharp-firstpass
+    - Boxophobic.PolyverseSkies.Editor
+    - Boxophobic.PolyverseSkies.Runtime
+    - Boxophobic.PolyverseSkies.Scripts
+    - Boxophobic.Utils.Editor
+    - Boxophobic.Utils.Scripts
+    - Cinemachine
+    - NonConvexCollider
+    - NonConvexColliderRuntimeAPI
+    - NonConvexEditor
     - PPv2URPConverters
+    - RuntimeTestAssembly
+    - sc.stylizedwater2.editor
+    - sc.stylizedwater2.runtime
+    - Sirenix.OdinInspector.CompatibilityLayer
+    - Sirenix.OdinInspector.CompatibilityLayer.Editor
+    - Sirenix.OdinInspector.Modules.UnityMathematics
     showAdvancedSettings: 0
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1

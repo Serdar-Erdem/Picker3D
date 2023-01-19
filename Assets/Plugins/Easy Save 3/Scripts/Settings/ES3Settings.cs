@@ -4,6 +4,11 @@ using ES3Internal;
 using UnityEditor;
 #endif
 
+#if UNITY_VISUAL_SCRIPTING
+[Unity.VisualScripting.IncludeInSettings(true)]
+#elif BOLT_VISUAL_SCRIPTING
+[Ludiq.IncludeInSettings(true)]
+#endif
 public class ES3Settings : System.ICloneable
 {
 
@@ -116,9 +121,11 @@ public class ES3Settings : System.ICloneable
 	public System.Text.Encoding encoding = System.Text.Encoding.UTF8;
     // <summary>Whether we should serialise children when serialising a GameObject.</summary>
     public bool saveChildren = true;
-	
-	/// <summary>Whether we should check that the data we are loading from a file matches the method we are using to load it.</summary>
-	[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    // <summary>Whether we should apply encryption and/or compression to raw cached data if they're specified in the cached data's settings.</summary>
+    public bool postprocessRawCachedData = false;
+
+    /// <summary>Whether we should check that the data we are loading from a file matches the method we are using to load it.</summary>
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
 	public bool typeChecking = true;
 
 	/// <summary>Enabling this ensures that only serialisable fields are serialised. Otherwise, possibly unsafe fields and properties will be serialised.</summary>
@@ -353,6 +360,7 @@ public class ES3Settings : System.ICloneable
         newSettings.assemblyNames = assemblyNames;
         newSettings.saveChildren = saveChildren;
         newSettings.serializationDepthLimit = serializationDepthLimit;
+        newSettings.postprocessRawCachedData = postprocessRawCachedData;
     }
 
     #endregion

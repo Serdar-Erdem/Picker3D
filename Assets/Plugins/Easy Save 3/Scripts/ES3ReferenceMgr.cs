@@ -10,17 +10,20 @@ using System.Reflection;
 using System;
 #endif
 
+#if UNITY_VISUAL_SCRIPTING
+using Unity.VisualScripting;
+[IncludeInSettings(true)]
+#endif
 public class ES3ReferenceMgr : ES3ReferenceMgrBase
 {
 #if UNITY_EDITOR
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void RefreshDependencies(bool isEnteringPlayMode = false)
     {
-        ES3ReferenceMgrBase.isEnteringPlayMode = isEnteringPlayMode;
+        // Empty the refId so it has to be refreshed.
+        refId = null;
 
-        // If we're not adding all prefabs to the manager, clear the prefabs array each time we refresh the dependencies.
-        if (!ES3Settings.defaultSettingsScriptableObject.addAllPrefabsToManager)
-            prefabs.Clear();
+        ES3ReferenceMgrBase.isEnteringPlayMode = isEnteringPlayMode;
 
         // This will get the dependencies for all GameObjects and Components from the active scene.
         AddDependencies(this.gameObject.scene.GetRootGameObjects());
